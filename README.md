@@ -36,6 +36,7 @@ vision: string
 customerID: string (Reference from customer table)
 ```
 
+## APIs Info:
 
 ### Customer API:
 1. Get all customers List with status ACTIVE [GET]
