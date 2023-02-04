@@ -47,7 +47,7 @@ const fetchUser = async (req, res) => {
 
     try {
 
-        const getData = await userModel.find({ isDeleted: false })
+        const getData = await userModel.find({ isDeleted: false, status: 'ACTIVE' })
 
         if (getData.length == 0) return res.status(404).send({ status: false, message: "No data exist!" })
 
