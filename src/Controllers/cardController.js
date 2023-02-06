@@ -13,17 +13,17 @@ const createCard = async (req, res) => {
         const { cardType, customerName, status, vision, customerID } = data
 
 
-        if (!Validator.isValidateCardType(cardType)) return res.status(400).send({ status: false, message: `This Card Type: '${cardType}' is not valid (e.g. you have two options 'REGULAR' or 'SPECIAL') !` })
+        if (!Validator.isValidBody(cardType) || !Validator.isValidateCardType(cardType)) return res.status(400).send({ status: false, message: `This Card Type: '${cardType}' is not valid (e.g. you have two options 'REGULAR' or 'SPECIAL') !` })
 
-        if (!Validator.isValidName(customerName)) return res.status(400).send({ status: false, message: `This Customer Name: '${customerName}' is not valid!` })
+        if (!Validator.isValidBody(customerName) || !Validator.isValidName(customerName)) return res.status(400).send({ status: false, message: `This Customer Name: '${customerName}' is not valid!` })
 
         if (status && !Validator.isValidateStatus(status)) return res.status(400).send({ status: false, message: `This Status: '${status}' is not valid (e.g. you have two options 'ACTIVE' or 'INACTIVE') !` })
 
-        if (!Validator.isValidName(vision)) return res.status(400).send({ status: false, message: `This Vision: '${vision}' is not valid format!` })
+        if (!Validator.isValidBody(vision) || !Validator.isValidName(vision)) return res.status(400).send({ status: false, message: `This Vision: '${vision}' is not valid format!` })
 
-        if (!Validator.isValidObjectId(customerID)) return res.status(400).send({ status: false, message: `This CustomerID: '${customerID}' is not valid!` })
+        if (!Validator.isValidBody(customerID) || !Validator.isValidObjectId(customerID)) return res.status(400).send({ status: false, message: `This CustomerID: '${customerID}' is not valid!` })
 
-
+        
         const checkCustomerID = await userModel.findOne({ _id: customerID, isDeleted: false })
         if (!checkCustomerID) return res.status(404).send({ status: false, message: `This CustomerID: '${customerID}' is not exist! ` })
 

@@ -12,14 +12,14 @@ const createUser = async (req, res) => {
         if (!firstName || !lastName || !mobileNumber || !DOB || !emailID || !address || !status)
             return res.status(400).send({ status: false, message: `All fields are mandatory (e.g. firstName, lastName, mobileNumber, DOB, emailID, address and status) !` })
 
-        if (!Validator.isValidName(firstName)) return res.status(400).send({ status: false, message: `This First Name: '${firstName}' is not valid!` })
-        if (!Validator.isValidName(lastName)) return res.status(400).send({ status: false, message: `This Last Name: '${lastName}' is not valid!` })
+        if (!Validator.isValidBody(firstName) || !Validator.isValidName(firstName)) return res.status(400).send({ status: false, message: `This First Name: '${firstName}' is not valid!` })
+        if (!Validator.isValidBody(lastName) || !Validator.isValidName(lastName)) return res.status(400).send({ status: false, message: `This Last Name: '${lastName}' is not valid!` })
 
-        if (!Validator.isValidMobileNumber(mobileNumber)) return res.status(400).send({ status: false, message: `This Mobile No.: '${mobileNumber}' is not valid!` })
+        if (!Validator.isValidBody(mobileNumber) || !Validator.isValidMobileNumber(mobileNumber)) return res.status(400).send({ status: false, message: `This Mobile No.: '${mobileNumber}' is not valid!` })
 
-        if (!Validator.isValidDate(DOB)) return res.status(400).send({ status: false, message: `This DOB date: '${DOB}' is not valid (e.g. format should be "YYYY/MM/DD")!` })
+        if (!Validator.isValidBody(DOB) || !Validator.isValidDate(DOB)) return res.status(400).send({ status: false, message: `This DOB date: '${DOB}' is not valid (e.g. format should be "YYYY/MM/DD")!` })
 
-        if (!Validator.isValidEmail(emailID)) return res.status(400).send({ status: false, message: `This EmailID: '${emailID}' is not valid!` })
+        if (!Validator.isValidBody(emailID) || !Validator.isValidEmail(emailID)) return res.status(400).send({ status: false, message: `This EmailID: '${emailID}' is not valid!` })
 
         const uniqueCheck = await userModel.findOne({ $or: [{ emailID: emailID }, { mobileNumber: mobileNumber }] })
         if (uniqueCheck) {
@@ -27,9 +27,9 @@ const createUser = async (req, res) => {
             if (uniqueCheck.emailID == emailID) return res.status(400).send({ status: false, message: `This EmailID: '${emailID}' is already used!` })
         }
 
-        if (!Validator.isValidName(address)) return res.status(400).send({ status: false, message: `This Address: '${address}' is not valid!` })
+        if (!Validator.isValidBody(address) || !Validator.isValidName(address)) return res.status(400).send({ status: false, message: `This Address: '${address}' is not valid!` })
 
-        if (!Validator.isValidateStatus(status)) return res.status(400).send({ status: false, message: `This Status: '${status}' is not valid (e.g. you have two options 'ACTIVE' or 'INACTIVE') !` })
+        if (!Validator.isValidBody(status) || !Validator.isValidateStatus(status)) return res.status(400).send({ status: false, message: `This Status: '${status}' is not valid (e.g. you have two options 'ACTIVE' or 'INACTIVE') !` })
 
         const userCreation = await userModel.create({ firstName, lastName, mobileNumber, DOB, emailID, address, status })
 
